@@ -22,12 +22,12 @@ public class ConnectionJDBCExample {
 				//e.printStackTrace();
 			} catch (SQLException e) {
 				System.out.println("커넥션이 연결하지 못하였습니다.");
-			}
+			} 
 		}
 		
 		
 		public static void main(String[] args) {
-			ConnectionJDBCExample c = new ConnectionJDBCExample();
+			new ConnectionJDBCExample();
 		}
 
 }
