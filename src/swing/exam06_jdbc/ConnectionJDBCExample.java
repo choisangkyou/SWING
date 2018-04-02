@@ -25,6 +25,7 @@ public class ConnectionJDBCExample {
 				conn = DriverManager.getConnection(url, user, password);
 				//System.out.println("JDBC Driver Connection Success");
 				
+				// [select] 
 				String str = "select * from person";
 				stmt = conn.createStatement();
 				rs = stmt.executeQuery(str);
@@ -38,6 +39,12 @@ public class ConnectionJDBCExample {
 					System.out.println();
 					//
 				}
+				
+				/*insert
+				String str_insert = "insert into person value('±èÀÚ±¤','010-3456-7787','rrte@daum.net')";
+				stmt.executeUpdate(str_insert);
+				*/
+				
 					
 			}catch (ClassNotFoundException e){
 				System.out.println("mysql jdbc driver can't loading..");
