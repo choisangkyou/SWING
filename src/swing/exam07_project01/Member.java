@@ -23,6 +23,7 @@ import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
@@ -83,7 +84,7 @@ public class Member extends JFrame implements ActionListener,MouseListener{
 	  PreparedStatement pstmt =null;
 	  ResultSet rs = null;
 	  
-	  static int idx;
+	  static int idx =-1;
 	public Member() { // 생성자
 		this.setTitle("자바 주소록 관리 프로그램");
 
@@ -269,7 +270,8 @@ public class Member extends JFrame implements ActionListener,MouseListener{
 		edit.addActionListener(this);
 		bsearch.addActionListener(this); //조회
 		tbsearch.addActionListener(this); //전체 조회
-		exit.addActionListener(this);
+		exit.addActionListener(this);//수정
+		delete.addActionListener(this);//삭제
 		
 		search.addItemListener(new ItemListener(){
 			String category=null;
@@ -378,10 +380,11 @@ public class Member extends JFrame implements ActionListener,MouseListener{
 		public void getListOpt(String arg1, String arg2) { //컬럼명, 값 으로 검색
 			dtm.setRowCount(0); // 표시할 행index 지정.
 			String sql = "select * from person";
-					sql += " where "+ arg1 + "= '" + arg2 + "'";
+					sql += " where "+ arg1 + " like  '%" + arg2 + "%'";
+					
 			try {
 				
-				System.out.println("sql:"+ sql);
+				System.out.println("검색:"+ sql);
 				pstmt = conn.prepareStatement(sql);
 				rs = pstmt.executeQuery();
 				
@@ -514,14 +517,18 @@ public class Member extends JFrame implements ActionListener,MouseListener{
 			String email1 = temail1.getText();
 			String email2 = temail2.getText();
 			String genderStr = gender.getSelectedCheckbox().getLabel(); //남,여
-			if(!name.equals(null)) {
+			
+			if(name.equals("") || age.equals("") || addr.equals("") || phone1.equals("") || email1.equals("")) {
+				MessageDialog("데이터를 입력하세요.");
+			}else {
+				System.out.println("입력else"+name);
 				String[] data = {name,age,genderStr,addr,phone1+"-"+phone2 +"-"+ phone3, email1 +email2};
 				addList(data); //각 입력된 textField값을 DB에 Insert하는 함수 호출
 				getListAll(); //전체 리스트에 반영.
-				
+				ItemClean();//초기화.
 			}
 			
-			ItemClean();//초기화.
+			
 			
 		}
 		
@@ -532,16 +539,19 @@ public class Member extends JFrame implements ActionListener,MouseListener{
 		}else if(o == bsearch) {//검색
 			
 			String item = (String) search.getSelectedItem();
+			
 			String value = tsearch.getText();
 			
-			if(item !="" && value!="") {
-				getListOpt(item,value);
-				//System.out.println(search.getSelectedItem() +":"+ tsearch.getText());
+			if(item.contains("검색") || value.equals("")) {
+				MessageDialog("검색내용을 입력하세요.");//팝업메시지.
+			}else {
+				getListOpt(item,value);//
 			}
+			
 		}else if(o == tbsearch) {//전체 검색.
 			getListAll();
 		}else if(o == edit) {
-			System.out.println("수정모드 입니다.");
+			//System.out.println("수정모드 입니다.");
 			String name = tname.getText();
 			String age = tage.getText();
 			String addr = taddr.getText();
@@ -552,21 +562,55 @@ public class Member extends JFrame implements ActionListener,MouseListener{
 			String email2 = temail2.getText();
 			String genderStr = gender.getSelectedCheckbox().getLabel(); //남,여			
 			if(!name.equals(null)) {
-				String[] data = {name,age,genderStr,addr,phone1+"-"+phone2 +"-"+ phone3, email1 +email2};
+				String[] data = {name,age,genderStr,addr,phone1+"-"+phone2 +"-"+ phone3, email1 +"@"+email2};
 				UpdateList(data,idx); //각 입력된 textField값을 DB에 Insert하는 함수 호출
 				getListAll(); //전체 리스트에 반영.
 				
+			}else {
+				MessageDialog("삭제할 테이블을 선택하세요.");
 			}
 			
 			ItemClean();//초기화.
 			
 		}else if (o== delete) {
-			
+			if(idx == -1) {
+				MessageDialog("삭제할 테이블을 선택하세요.");
+			}else {
+				deleteMember(idx);
+			}
 		}
 		
 	}
 		
 		
+	private void deleteMember(int idx) {
+		PreparedStatement ps =null;
+		String sql = "delete  from  person ";
+				sql += " where idx ="+ idx;
+				
+				//String[] data = {name,age,addr,phone1+"-"+phone2 +"-"+ phone3, email1 +email2,genderStr};
+				
+				try {
+					ps =  conn.prepareStatement(sql);
+
+					System.out.println("sql:"+ps.toString());
+					
+					if(ps.executeUpdate() > 0) {
+						getListAll(); //전체 리스트에 반영.
+						ItemClean();//초기화.
+						System.out.println("delete success");
+					}else {
+						System.out.println("delete fail..");
+					}
+					
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				//System.out.println("text:"+ name.getText());
+		
+	}
+
 	public static void main(String[] args) {
 		new Member();
 		
@@ -582,7 +626,7 @@ public class Member extends JFrame implements ActionListener,MouseListener{
 			 String val3 = (String) table.getValueAt(iRow,3);//주소
 			 String val4 = (String) table.getValueAt(iRow,4);//연락처
 			 String val5 = (String) table.getValueAt(iRow,5); //이메일
-			 idx = (int) table.getValueAt(iRow,6);//index
+			 idx = (int) table.getValueAt(iRow,6);//index 
 			 String[] phone = val4.split("-");
 			 String[] email = val5.split("@");
 
@@ -618,6 +662,9 @@ public class Member extends JFrame implements ActionListener,MouseListener{
 	}
 		
 		
+	public void MessageDialog(String message) {
+		JOptionPane.showMessageDialog(null, message);
+	}
 	
 }
 
