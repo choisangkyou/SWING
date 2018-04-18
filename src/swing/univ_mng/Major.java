@@ -30,7 +30,7 @@ import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
 
-public class Member extends JFrame implements ActionListener,MouseListener{
+public class Major extends JFrame implements ActionListener,MouseListener{
 	JTable table;
 	DefaultTableModel dtm;
 	JScrollPane scroll;
@@ -48,9 +48,9 @@ public class Member extends JFrame implements ActionListener,MouseListener{
 	JLabel title;
 	
 	JLabel majorcode,majorname,major;// 전공코드, 학부명, 전공명
-	JTextField tmajorcode,tmajorname,tmajor;
+	JTextField tmajorcode,tmajorname,tmajor;//각 input box
 	
-		//JComboBox emailcb;
+
 	JComboBox search;
 	JTextField tsearch;
 	JButton bsearch;
@@ -69,7 +69,7 @@ public class Member extends JFrame implements ActionListener,MouseListener{
 	  ResultSet rs = null;
 	  
 	  static int idx =-1;
-	public Member() { // 생성자
+	public Major() { // 생성자
 		this.setTitle("학부/전공 관리");
 
 		Toolkit tk = Toolkit.getDefaultToolkit(); // 이미지 얻어와서 출력
@@ -508,7 +508,7 @@ public class Member extends JFrame implements ActionListener,MouseListener{
 	}
 
 	public static void main(String[] args) {
-		new Member();
+		new Major();
 		
 	}
 
