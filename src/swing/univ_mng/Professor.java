@@ -484,9 +484,6 @@ public class Professor extends JFrame implements ActionListener,MouseListener{
 				getListAll(); //전체 리스트에 반영.
 				ItemClean();//초기화.
 			}
-			
-			
-			
 		}
 		
 		Object o = e.getSource();
