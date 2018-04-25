@@ -1,4 +1,4 @@
-package swing.exam04_menu;
+package swing.univ_mng;
 
 import java.awt.Color;
 import java.awt.Event;
@@ -19,8 +19,6 @@ import javax.swing.JMenuItem;
 import javax.swing.JTextPane;
 import javax.swing.KeyStroke;
 
-import swing.univ_mng.Student;
-
 public class MenuDemo extends JFrame implements ActionListener {
 	JMenuBar mb;
 	JMenu file, color , font ,reg_auth;
@@ -38,7 +36,7 @@ public class MenuDemo extends JFrame implements ActionListener {
 		makeMenu();
 		
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setSize(500,500);
+		setSize(700,750);
 		setVisible(true);
 	}
 
@@ -113,13 +111,16 @@ public class MenuDemo extends JFrame implements ActionListener {
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		 JMenuItem mi = (JMenuItem)e.getSource();
-		 
+		 System.out.println(mi.getText());
 		 //파일 메뉴 처리..
-		 if(mi.getText() =="학생관리") {
-			new Student();
-			
+		 if(mi.getText() =="등록") {
+			Student student = new Student();
+			//add(student);
+			//add("Center",new Student());
+			this.setVisible(true);
+	
 		 }
-		 
+/*		 
 		 if(mi.getText() =="Open File") {
 			fc = new JFileChooser();
 			fc.showSaveDialog(this);
@@ -129,18 +130,20 @@ public class MenuDemo extends JFrame implements ActionListener {
 			//text.setText(path.getAbsolutePath());
 			
 		 }
+		 */
 		
-		 if(mi.getText() =="Save File") {
+	/*	 if(mi.getText() =="Save File") {
 			fc = new JFileChooser();
 			fc.showSaveDialog(this);
 			File file = fc.getSelectedFile();
 			File path = file.getAbsoluteFile();
 			SaveFile(path);
 		 }
+		 */
  
  
 		 //색상 메뉴 처리..
-		 switch(mi.getText()) {
+		/* switch(mi.getText()) {
 		 case "Blue":
 			 text.setBackground(Color.BLUE);
 			 break;
@@ -150,11 +153,11 @@ public class MenuDemo extends JFrame implements ActionListener {
 		 case "Yellow":
 			 text.setForeground(Color.YELLOW);
 			 break;
-		 }
+		 }*/
 		
 	}
 	
-	public void SaveFile(File filepath) {
+	/*public void SaveFile(File filepath) {
 		try
         {
             FileWriter fw = new FileWriter(filepath); // 절대주소 경로 가능
@@ -174,7 +177,7 @@ public class MenuDemo extends JFrame implements ActionListener {
 
 
 	}
-	
+	*/
 	public static void main(String[] args) {
 		new MenuDemo();
 
