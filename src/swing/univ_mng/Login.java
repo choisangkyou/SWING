@@ -188,6 +188,7 @@ public class Login extends JFrame implements ActionListener,MouseListener{
 
 		southp.add(exit);
 		exit.addActionListener(this);//수정
+		bsearch.addActionListener(this);
 
 		
 		add("South",southp);
@@ -224,37 +225,69 @@ public class Login extends JFrame implements ActionListener,MouseListener{
 	
 	}
 	
+	//권한 관리자 이름 가져오기 
+	public String getName(String id, String password , String type) {
+		String name=null;
+		String sql =null;
+				if(type.equals("학생")) {
+					sql ="SELECT * FROM student where std_code =?";
+				}else if(type.equals("교수")) {
+					sql ="SELECT * FROM professor where prof_code =?";
+				}
+				
+		try {
+			
+			
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setString(1, id);
+			
+			System.out.println("sql:"+ pstmt.toString());
+			
+			rs = pstmt.executeQuery();
+			
+				if(rs.next()) {
+					if(type.equals("학생")) {
+						name = rs.getString("std_name");
+					}else {
+						name = rs.getString("prof_name");
+					}
+			}
+				
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
 		
+		return name;
+	}
 		
 	
-	//==========[ 권하 로그인 ]============
+	
+	//==========[ 권한 로그인 ]============
 	public boolean getLoginCheck(String id, String password , String type) {
 		boolean result = false;
 	
 		String sql =null;
-		if (type.equals("교수")) {
-			sql = "select * from professor"; //로그인 DataBase Table 셋팅후 해당 db로 로그인 처리 필요함..
-			
-		}else {
-			
-			sql = "select * from student";
-		}
-		
-		
+				sql ="SELECT * FROM access_auth\r\n" + 
+						"where auth_id =? and auth_password=? ";
 		try {
 			
 			pstmt = conn.prepareStatement(sql);
+			pstmt.setString(1, id);
+			pstmt.setNString(2, password);
+			
 			rs = pstmt.executeQuery();
 			
-				while(rs.next()) {
-					int prof_code = rs.getInt("prof_code");
-					String prof_name = rs.getString("prof_name");
-					String prof_jumincode = rs.getString("prof_jumincode");
-					String prof_majorcode = rs.getString("prof_majorcode");
+				if(rs.next()) {
 					
-				
-				Object[] list = {prof_code,prof_name,prof_jumincode,prof_majorcode};
-				dtm.addRow(list);
+					String auth_id = rs.getString("auth_id");
+					String auth_password = rs.getString("auth_password");
+					String auth_type = rs.getString("auth_descript");
+					String auth_code = rs.getString("auth_code");
+					
+					
+					result = true;
+					tjumin.setText(getName(auth_code,auth_password,auth_type)); //이름 가져오기.
+					
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -263,7 +296,14 @@ public class Login extends JFrame implements ActionListener,MouseListener{
 		return result;
 	}
 	
-	
+	//초기화
+	public void setClean() {
+		if(r1.isSelected()) r1.setSelected(false);
+		if(r2.isSelected()) r2.setSelected(false);
+		tmajorcode.setText("");
+		tmajorname.setText("");
+		tjumin.setText("");
+	}
 
 	//ActionListner
 	public void actionPerformed(ActionEvent e) {
@@ -280,6 +320,8 @@ public class Login extends JFrame implements ActionListener,MouseListener{
 			boolean opt2 = r2.isSelected(); //학생
 			String type=null;
 			
+			//MessageDialog("옵션:"+ opt1 +":"+ opt2);
+			
 			if(opt1 || opt2) {
 				if(opt1) type="교수";
 				if(opt2) type ="학생";
@@ -287,15 +329,31 @@ public class Login extends JFrame implements ActionListener,MouseListener{
 				String password = tmajorname.getText();
 				String name = tjumin.getText();
 				
+				//field check
+				
 				if(id.equals("") || password.equals("")) {
-					MessageDialog("검색내용을 입력하세요.");//팝업메시지.
+					MessageDialog("아이디와 비번을 입력하세요.");//팝업메시지.
+					tmajorcode.requestFocus();
 				}else {
-					getLoginCheck(id, password, type);//
+					
+					if(getLoginCheck(id, password, type)) {
+						MessageDialog(tjumin.getText()+" "+ type+"님 반갑습니다.");//팝업메시지.
+						
+						setClean();
+						
+						if(opt1) new Professor();
+						if(opt2) new Student();
+
+						
+					}else {
+						MessageDialog("아이디 & 비번이 일치하지 않습니다.");//팝업메시지.
+						tmajorcode.requestFocus();
+					}
 				}
 				
 				
 			}else {
-				MessageDialog("옵션을 선택하세요.");//팝업메시지.
+				MessageDialog("[학생,교수]옵션을 선택하세요.");//팝업메시지.
 			}
 			
 		
@@ -305,7 +363,7 @@ public class Login extends JFrame implements ActionListener,MouseListener{
 		
 		
 	public void MessageDialog(String message) {
-		JOptionPane.showMessageDialog(null, message);
+		JOptionPane.showMessageDialog(null, message,message, JOptionPane.WARNING_MESSAGE);
 	}
 	
 
