@@ -453,11 +453,18 @@ public class Professor extends JFrame implements ActionListener,MouseListener{
 
 	}
 	
-	// TextField 초기화 
+	// 레코드에서 선택한 데이터 표시하기 
 	public void selectedDataView(String[] values) {
 			tmajorcode.setText(values[0]);
 			tmajorname.setText(values[1]);
 			tjumin.setText(values[2]);
+			int majorcode = Integer.parseInt(values[3]);
+			
+			if(majorcode==1)majorselect.setSelectedIndex(0);
+			if(majorcode==2)majorselect.setSelectedIndex(1);
+			if(majorcode==3)majorselect.setSelectedIndex(2);
+			
+			
 	}
 	
 	
@@ -504,6 +511,7 @@ public class Professor extends JFrame implements ActionListener,MouseListener{
 			
 		}else if(o == tbsearch) {//전체 검색.
 			getListAll();
+			ItemClean();//초기화.
 		}else if(o == edit) {
 			//System.out.println("수정모드 입니다.");
 			String majorcode = tmajorcode.getText();

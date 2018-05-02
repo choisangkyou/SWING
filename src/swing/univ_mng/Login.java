@@ -340,10 +340,12 @@ public class Login extends JFrame implements ActionListener,MouseListener{
 						MessageDialog(tjumin.getText()+" "+ type+"님 반갑습니다.");//팝업메시지.
 						
 						setClean();
+						MenuDemo menu = new MenuDemo();
 						
-						if(opt1) new Professor();
-						if(opt2) new Student();
-
+						if(opt1) menu.profMakeMenu();
+						if(opt2) menu.stdMakeMenu();
+						
+						this.dispose();
 						
 					}else {
 						MessageDialog("아이디 & 비번이 일치하지 않습니다.");//팝업메시지.

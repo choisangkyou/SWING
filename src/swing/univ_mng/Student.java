@@ -531,7 +531,9 @@ public class Student extends JFrame implements ActionListener,MouseListener{
 			}
 			
 		}else if(o == tbsearch) {//전체 검색.
+			ItemClean();//초기화.
 			getListAll();
+			
 		}else if(o == edit) {
 			//System.out.println("수정모드 입니다.");
 			String val1 = tlabel1.getText();//학번
