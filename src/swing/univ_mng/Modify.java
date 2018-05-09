@@ -34,7 +34,7 @@ import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
 
-public class Login extends JFrame implements ActionListener,MouseListener{
+public class Modify extends JFrame implements ActionListener,MouseListener{
 	JTable table;
 	DefaultTableModel dtm;
 	JScrollPane scroll;
@@ -48,8 +48,8 @@ public class Login extends JFrame implements ActionListener,MouseListener{
 	JPanel tablep; // 테이블
 	JPanel southp; // 버튼
 
+	static int auth_type=0; //[0]미지정[2]교수,[1]학생
 	static String auth_code=null;
-	
 	JLabel title;
 	
 	JLabel majorcode,majorname,jumin,major2,label1,label2;// 전공코드, 학부명, 전공명
@@ -60,7 +60,7 @@ public class Login extends JFrame implements ActionListener,MouseListener{
 	JTextField tsearch;
 	JButton bsearch;
 	JButton tbsearch;
-	JRadioButton r1,r2;
+	//JRadioButton r1,r2;
 	
 
 /*	JButton input;
@@ -76,7 +76,7 @@ public class Login extends JFrame implements ActionListener,MouseListener{
 	  ResultSet rs = null;
 	  
 	  static int idx =-1;
-	public Login() { // 생성자
+	public Modify() { // 생성자
 		ConnectionDB(); //DB연결
 		this.setTitle("로그인 ");
 
@@ -88,14 +88,14 @@ public class Login extends JFrame implements ActionListener,MouseListener{
 		f2 = new Font("serif", Font.BOLD, 20);
 
 		this.setLayout(null);
-		this.setBounds(50, 50, 600, 650);
+		this.setBounds(50, 50, 600, 400);
 
 		// 첫번째 nnorthp 패널(컨버전스 레이블...)
 		nnorthp = new JPanel();
 		nnorthp.setLayout(null);
 		nnorthp.setBounds(0, 0, 600, 40);
 
-		title = new JLabel("권한 관리");
+		title = new JLabel("패스워드 변경");
 		title.setBounds(220, 8, 600, 25);
 		title.setFont(f1);
 		title.setForeground(Color.WHITE);
@@ -109,26 +109,26 @@ public class Login extends JFrame implements ActionListener,MouseListener{
 		northp.setLayout(null);
 		northp.setBounds(0, 30, 600, 160);
 
-		majorcode = new JLabel("아이디");
+		majorcode = new JLabel("코드");
 		tmajorcode = new JTextField(20);
 		
-		majorname = new JLabel("비번");
+		majorname = new JLabel("이름");
 		tmajorname = new JTextField(20);
 		
 		
-		jumin = new JLabel("이름");
+		jumin = new JLabel("변경할 패스워드");
 		tjumin = new JTextField(20);
 		
-		label1 = new JLabel("교수");
-		label2 = new JLabel("학생");
+		//label1 = new JLabel("교수");
+		//label2 = new JLabel("학생");
 		
-		r1 = new JRadioButton("교수");
-		r2 = new JRadioButton("학생");
+		//r1 = new JRadioButton("교수");
+		//r2 = new JRadioButton("학생");
 		
-		ButtonGroup group = new ButtonGroup();
+		/*ButtonGroup group = new ButtonGroup();
 		group.add(r1);
 		group.add(r2);
-
+*/
 		
 		majorcode.setBounds(20, 20, 60, 25);
 		tmajorcode.setBounds(80, 20, 100, 25);
@@ -136,13 +136,13 @@ public class Login extends JFrame implements ActionListener,MouseListener{
 		majorname.setBounds(190, 20, 50, 25);
 		tmajorname.setBounds(230, 20, 120, 25);
 		
-		jumin.setBounds(360, 20, 60, 25);
-		tjumin.setBounds(420, 20, 150, 25);
+		jumin.setBounds(20, 60, 140, 25);
+		tjumin.setBounds(150, 60, 150, 25);
 		
-		label1.setBounds(20,50,30,25);
-		label2.setBounds(80,50,30,25);
-		r1.setBounds(50,50,20,25);
-		r2.setBounds(110,50,20,25);
+		//label1.setBounds(20,50,30,25);
+		//label2.setBounds(80,50,30,25);
+	//	r1.setBounds(50,50,20,25);
+	//	r2.setBounds(110,50,20,25);
 
 		// northp 패널 등록
 		northp.add(majorcode);
@@ -151,10 +151,10 @@ public class Login extends JFrame implements ActionListener,MouseListener{
 		northp.add(tmajorname);
 		northp.add(jumin);
 		northp.add(tjumin);
-		northp.add(label1);
-		northp.add(label2);
-		northp.add(r1);
-		northp.add(r2);
+		//northp.add(label1);
+		//northp.add(label2);
+	//	northp.add(r1);
+	//	northp.add(r2);
 		
 	
 		this.add(northp);
@@ -168,8 +168,8 @@ public class Login extends JFrame implements ActionListener,MouseListener{
 		bsearch = new JButton("확인");
 		bsearch.setBounds(250, 45, 74, 25);
 
-		bsearch.setBackground(Color.GRAY);
-		bsearch.setForeground(Color.RED);
+		bsearch.setBackground(Color.yellow);
+		bsearch.setForeground(Color.DARK_GRAY);
 		orthp.add(bsearch);
 		add("Center",orthp);
 
@@ -178,21 +178,22 @@ public class Login extends JFrame implements ActionListener,MouseListener{
 		// 다섯번째 southp 패널(버튼들)
 		southp = new JPanel();
 		southp.setLayout(null);
-		southp.setBounds(5, 500, 600, 200);
+		southp.setBounds(0, 240, 600, 80);
+		southp.setBackground(Color.YELLOW);
 
 		exit = new JButton("종료");
 
-		exit.setBounds(438, 45, 138, 40);
-		exit.setFont(f2);
-		exit.setBackground(Color.MAGENTA);
-		exit.setForeground(Color.WHITE);
+		exit.setBounds(250, 55, 74, 25);
+		//exit.setFont(f2);
+		exit.setBackground(Color.GRAY);
+		exit.setForeground(Color.red);
 
 		southp.add(exit);
+		add("Center",southp);
+	
 		exit.addActionListener(this);//수정
 		bsearch.addActionListener(this);
 
-		
-		add("South",southp);
 		
 		this.setVisible(true);
 
@@ -262,6 +263,34 @@ public class Login extends JFrame implements ActionListener,MouseListener{
 	}
 		
 	
+	//==========[ 패스워드 변경 ]============
+		public boolean setPassword(String sAuth_code , String rePassword) {
+			boolean result = false;	
+			String sql =null;
+					sql ="update  access_auth ";
+					sql += " set auth_password =? ";
+				    sql += " where auth_code =? ";
+			try {
+				
+				pstmt = conn.prepareStatement(sql);
+				pstmt.setString(1, rePassword);
+				pstmt.setString(2, sAuth_code);
+				
+				System.out.println("sql:"+ pstmt.toString());
+				//rs = pstmt.executeQuery();
+				int iVal = pstmt.executeUpdate();
+				if(iVal > 0) {
+					result = true;
+				}
+				
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+			
+			return result;
+		}
+		
+		
 	
 	//==========[ 권한 로그인 ]============
 	public boolean getLoginCheck(String id, String password , String type) {
@@ -283,12 +312,11 @@ public class Login extends JFrame implements ActionListener,MouseListener{
 					String auth_id = rs.getString("auth_id");
 					String auth_password = rs.getString("auth_password");
 					String auth_type = rs.getString("auth_descript");
-					String sauth_code = rs.getString("auth_code");
+					String auth_code = rs.getString("auth_code");
 					
 					
 					result = true;
-					auth_code = sauth_code; //학생,교수 코드 지정.
-					tjumin.setText(getName(sauth_code,auth_password,auth_type)); //이름 가져오기.
+					tjumin.setText(getName(auth_code,auth_password,auth_type)); //이름 가져오기.
 					
 			}
 		} catch (SQLException e) {
@@ -300,8 +328,6 @@ public class Login extends JFrame implements ActionListener,MouseListener{
 	
 	//초기화
 	public void setClean() {
-		if(r1.isSelected()) r1.setSelected(false);
-		if(r2.isSelected()) r2.setSelected(false);
 		tmajorcode.setText("");
 		tmajorname.setText("");
 		tjumin.setText("");
@@ -309,71 +335,37 @@ public class Login extends JFrame implements ActionListener,MouseListener{
 
 	//ActionListner
 	public void actionPerformed(ActionEvent e) {
-	
-		
 		String evt = e.getActionCommand();
 			
 		Object o = e.getSource();
 		
 		if(o ==exit) {
 			System.exit(0);
-		}else if(o == bsearch) {//검색
-			boolean opt1 = r1.isSelected(); //교수
-			boolean opt2 = r2.isSelected(); //학생
-			String type=null;
-			
-			//MessageDialog("옵션:"+ opt1 +":"+ opt2);
-			
-			if(opt1 || opt2) {
-				if(opt1) type="교수";
-				if(opt2) type ="학생";
+		}else if(o == bsearch) {//확인 버튼
+
 				String id = tmajorcode.getText();
 				String password = tmajorname.getText();
-				String name = tjumin.getText();
+				String rePassword = tjumin.getText();
 				
-				//field check
-				
-				if(id.equals("") || password.equals("")) {
-					MessageDialog("아이디와 비번을 입력하세요.");//팝업메시지.
-					tmajorcode.requestFocus();
+
+				if(rePassword.equals("")) {
+					MessageDialog("변경할 비번을 입력하세요.");//팝업메시지.
+					tjumin.requestFocus();
 				}else {
-					
-					if(getLoginCheck(id, password, type)) {
-						MessageDialog(tjumin.getText()+" "+ type+"님 반갑습니다.");//팝업메시지.
-						
-						setClean();
-						MenuDemo menu = new MenuDemo();
-						
-						if(auth_code!=null)
-							menu.auth_code = auth_code; //코드셋
-						
-						if(opt1) {
-							menu.profMakeMenu();
-							menu.auth_type=2;//교수
-						}
-							
-						if(opt2) {
-							menu.stdMakeMenu();
-							menu.auth_type = 1;//학생
-						}
-						
+					//패스워드 변경 로직.
+					System.out.println("코드:"+ id +":"+ rePassword);
+					if(setPassword(id , rePassword)) {
+						MessageDialog("패스워드가 변경 되었습니다.");
 						this.dispose();
-						
 					}else {
-						MessageDialog("아이디 & 비번이 일치하지 않습니다.");//팝업메시지.
-						tmajorcode.requestFocus();
+						MessageDialog("패스워드 변경 실패!!");
 					}
 				}
 				
-				
-			}else {
-				MessageDialog("[학생,교수]옵션을 선택하세요.");//팝업메시지.
-			}
-			
+			} //검색 end
+		}//action Performed
 		
-		}
-		
-	}
+
 		
 		
 	public void MessageDialog(String message) {
@@ -382,7 +374,7 @@ public class Login extends JFrame implements ActionListener,MouseListener{
 	
 
 	public static void main(String[] args) {
-		new Login();
+		new Modify();
 		
 	}
 
