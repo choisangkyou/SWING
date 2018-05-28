@@ -609,6 +609,7 @@ public class Course_register extends JFrame implements ActionListener,MouseListe
 						
 						if(ps.executeUpdate() > 0) {
 							System.out.println("delete  addCourse success");
+							MessageDialog("수강신청 정상처리 되었습니다.");
 							getListAll();//리프레쉬.
 							getListAll2();//리프레쉬.	
 						}else {
@@ -643,6 +644,7 @@ public class Course_register extends JFrame implements ActionListener,MouseListe
 								
 								if(ps.executeUpdate() > 0) {
 									System.out.println("delete  addCourse success");
+									MessageDialog("수강내역이 삭제 되었습니다.");
 									getListAll();//리프레쉬.
 									getListAll2();//리프레쉬.	
 								}else {
