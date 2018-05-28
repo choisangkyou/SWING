@@ -48,7 +48,7 @@ public class Login extends JFrame implements ActionListener,MouseListener{
 	JPanel tablep; // 테이블
 	JPanel southp; // 버튼
 
-	static String auth_code=null;
+	String auth_code=null;
 	
 	JLabel title;
 	
@@ -76,6 +76,9 @@ public class Login extends JFrame implements ActionListener,MouseListener{
 	  ResultSet rs = null;
 	  
 	  static int idx =-1;
+	  String sname ;//이름
+	  String smajor;//전공과목
+	  
 	public Login() { // 생성자
 		ConnectionDB(); //DB연결
 		this.setTitle("로그인 ");
@@ -226,6 +229,40 @@ public class Login extends JFrame implements ActionListener,MouseListener{
 	
 	}
 	
+	//학생 전공과목명 가져오기
+	public String getMajorName(String scode) {
+		String name=null;
+		String sql = "SELECT b.major_name";
+				sql += " FROM student a ";
+				sql += " join major b ";
+				sql += " on a.std_major_code = b.major_code ";
+				sql += " where a.std_code =?";
+				
+				
+		try {
+			
+			
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setString(1, scode);
+			
+			System.out.println("sql:"+ pstmt.toString());
+			
+			rs = pstmt.executeQuery();
+			
+				if(rs.next()) {
+					
+					name = rs.getString("major_name");
+					
+			}
+				
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
+		return name;
+	}
+	
+	
 	//권한 관리자 이름 가져오기 
 	public String getName(String id, String password , String type) {
 		String name=null;
@@ -288,7 +325,8 @@ public class Login extends JFrame implements ActionListener,MouseListener{
 					
 					result = true;
 					auth_code = sauth_code; //학생,교수 코드 지정.
-					tjumin.setText(getName(sauth_code,auth_password,auth_type)); //이름 가져오기.
+					sname = getName(sauth_code,auth_password,auth_type);
+					tjumin.setText(sname); //이름 가져오기.
 					
 			}
 		} catch (SQLException e) {
@@ -353,7 +391,8 @@ public class Login extends JFrame implements ActionListener,MouseListener{
 						}
 							
 						if(opt2) {
-							menu.stdMakeMenu();
+							smajor =getMajorName(auth_code);
+							menu.stdMakeMenu(auth_code,sname,smajor);
 							menu.auth_type = 1;//학생
 						}
 						

@@ -32,6 +32,8 @@ public class MenuDemo extends JFrame implements ActionListener {
 	JFileChooser fc;
 	static int auth_type=0; //[0]미지정[2]교수,[1]학생
 	static String auth_code = null;
+	String scode,sname,smajor;
+	
 	
 	public MenuDemo() {
 		setTitle("학사관리시스템");
@@ -44,7 +46,10 @@ public class MenuDemo extends JFrame implements ActionListener {
 	}
 
 	//학생 메뉴
-	public void stdMakeMenu() {
+	public void stdMakeMenu(String scode,String sname, String smajor) {
+		this.scode = scode;
+		this.sname = sname;
+		this.smajor = smajor;
 		text = new JTextPane();
 		
 		mb = new JMenuBar();
@@ -181,8 +186,9 @@ public class MenuDemo extends JFrame implements ActionListener {
 		 if(auth_type==1) { //학생
 			 
 			 if(mi.getText().equals("수강등록")) {
-					Major major  = new Major();
-					this.setVisible(true);
+				 //Course_register course_reg  = new Course_register();
+				 Course_register course_reg  = new Course_register(scode,sname,smajor);
+					//this.setVisible(true);
 			 }else if (mi.getText().equals("패스워드 수정")) {
 				Modify modify = new Modify();
 				modify.majorcode.setText("학생코드");
